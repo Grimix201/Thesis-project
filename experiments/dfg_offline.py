@@ -22,19 +22,19 @@ def enhance_dfg(new_dfg):
 
 
 def get_dfg(log, duration):
-    total = 0.0
+    total_time = 0.0
     if duration:
-        start = time()
+        start_time = time()
         new_dfg, _, _ = discover_dfg(log)
         enhance_dfg(new_dfg)
-        total = time() - start
+        total_time = time() - start_time
     else:
         new_dfg, _, _ = discover_dfg(log)
         enhance_dfg(new_dfg)
     global start_activities, end_activities
     start_activities = get_start_activities(df)
     end_activities = get_end_activities(df)
-    return total
+    return total_time
 
 
 def check_df_read(new_df):
@@ -55,38 +55,42 @@ def reading_from_file(filename, path):
 
 def from_log_to_dfg(filename, path, firstcall=True, duration=False):
     global df, dfg, start_activities, end_activities
+    total_time = 0
     if firstcall:
         df = reading_from_file(filename, path)
+        df.copy().rename(columns=from_df_to_csv).to_csv(join(path, "Saved_event_log.csv"))
         if duration:
-            start = time()
+            start_time = time()
             dfg, start_activities, end_activities = discover_dfg(df)
-            total = time() - start
-            return dfg, total
+            total_time = time() - start_time
+            return dfg, total_time   
         dfg, start_activities, end_activities = discover_dfg(df)
-        return dfg, 0
+        return dfg, total_time
     
     new_df = reading_from_file(filename, path)
     log = check_df_read(new_df)
     df = concat([df, new_df], ignore_index=True)
-    total = get_dfg(log, duration)
+    total_time = get_dfg(log, duration)
     df.copy().rename(columns=from_df_to_csv).to_csv(join(path, "Saved_event_log.csv"))
-    return log, total
+    return dfg, total_time
 
 
 def get_incr_model(filename, path, n_files, total_dfg=None, duration=False, check=False):
     if total_dfg is None:
         total_dfg, _ = from_log_to_dfg(filename, path, duration)
 
-    total_time = 0
+    time = 0
     for i in range(1, n_files+1):
-        _, time = from_log_to_dfg(filename[:-4] + "_{}".format(i) + filename[-4:], path, i == 1, duration)
-        total_time += time
-    assert total_dfg == dfg, "Should be the same"
-
+        _, t_int = from_log_to_dfg(filename[:-4] + "_{}".format(i) + filename[-4:], path, i == 1, duration)
+        time += t_int
+    
     if check:
+        assert total_dfg == dfg, "Should be the same"
+    
         saved_dfg, _ = from_log_to_dfg("Saved_event_log.csv", path)
         assert saved_dfg == total_dfg, "Should be the same"
-    return dfg, total_time
+
+    return dfg, time
 
 
 if __name__ == "__main__":

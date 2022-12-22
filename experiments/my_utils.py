@@ -118,7 +118,7 @@ def save_files(events, n_files, filename, path, header):
         save_csv(join(path, basename(filename) + "_{}".format(i) + file_ext), header, events[round(start): round(start + n_events)])
         start += n_events
         i += 1
-    save_csv(path + basename(filename) + "_{}".format(n_files) + file_ext, header, events[round(start):])
+    save_csv(join(path, basename(filename) + "_{}".format(n_files) + file_ext), header, events[round(start):])
         
 
 def save(log_file=[], filename="", path="", n_files=None):
@@ -136,18 +136,20 @@ def save(log_file=[], filename="", path="", n_files=None):
     if len(log_file) > 0:
         header = ["case", "activity", "time"]
         save_csv(join(getcwd(), path, filename) + file_ext, header, log_file) # total log file
-        save_files(log_file, n_files, filename, path, header)
+        if n_files > 1:
+            save_files(log_file, n_files, filename, path, header)
         return
 
-    # print(filename)
-    # print(join(path, filename))
-    dialect = get_csv_delimiter(join(path, filename))
-    with open((join(path, filename))) as f:
-        from csv import reader
-        csv = reader(f, dialect)
-        my_list = list(csv)
-    
-    save_files(my_list[1:], n_files, filename[:-4], path, my_list[0])
+    if n_files > 1:
+        # print(filename)
+        # print(join(path, filename))
+        dialect = get_csv_delimiter(join(path, filename))
+        with open((join(path, filename))) as f:
+            from csv import reader
+            csv = reader(f, dialect)
+            my_list = list(csv)
+        
+        save_files(my_list[1:], n_files, filename[:-4], path, my_list[0])
 
 
 def user_interaction():
@@ -188,12 +190,12 @@ def main_utils(argv):
     if len(argv) == 6:
         log_file = generate_traces(int(argv[0]), int(argv[1]), argv[2].split(','))
         path = check_path(argv[4])
-        save(log_file, argv[3][:-4], path, argv[5])
+        save(log_file, argv[3][:-4], path, int(argv[5]))
         return
     if len(argv) > 1:
         if check_csv_file(join(argv[1], argv[0])):
             if len(argv) == 3:
-                save(filename=argv[0], path=argv[1], n_files=argv[2])
+                save(filename=argv[0], path=argv[1], n_files=int(argv[2]))
             else:
                 save(filename=argv[0], path=argv[1])
             return
