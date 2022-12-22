@@ -11,7 +11,7 @@ The following programs/packages are requested to use this project:
 
 ## How to run
 
-### scripts
+### Scripts
 
 To run the scripts, open the terminal, move to the project directory and then insert this command
 
