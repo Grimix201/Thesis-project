@@ -34,17 +34,19 @@ uniques = df[columns[1]].unique()
 # print("\n", uniques, "\t", type(uniques[0]))
 
 # plot data
-cmap = plt.colormaps["plasma"]
+# cmap = plt.colormaps["plasma"]
 norm = Normalize(uniques[0], uniques[-1])
 
 for i, dff in df.groupby(columns[1]):
-    plt.scatter(dff[columns[0]], dff[columns[2]], s=128, c=cmap(norm(dff[columns[1]])))
+    # plt.scatter(dff[columns[0]], dff[columns[2]], s=128, c=cmap(norm(dff[columns[1]])))
+    plt.plot(dff[columns[0]], dff[columns[2]], marker='o', markersize=8, label=i)
+    # color=cmap(norm(i)), \
 
 font = {'fontsize' : 24}
 plt.xlabel(columns[0], fontdict=font)
 plt.ylabel("execution times (s)", fontdict=font)
 plt.xticks(df.get(columns[0]))
-plt.legend(uniques, loc="best")
+plt.legend(loc="best")
 
 plt.savefig(join(getcwd(), "images/")+savefile)
 #plt.show()

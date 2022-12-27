@@ -70,8 +70,8 @@ def from_log_to_dfg(filename, path, firstcall=True, duration=False):
     new_df = reading_from_file(filename, path)
     log = check_df_read(new_df)
     df = concat([df, new_df], ignore_index=True)
-    total_time = get_dfg(log, duration)
     df.copy().rename(columns=from_df_to_csv).to_csv(join(path, "Saved_event_log.csv"))
+    total_time = get_dfg(log, duration)
     return dfg, total_time
 
 
@@ -94,6 +94,11 @@ def get_incr_model(filename, path, n_files, total_dfg=None, duration=False, chec
 
 
 if __name__ == "__main__":
+    from sys import argv
+    if len(argv) < 2 or len(argv) > 4:
+        print("Error: number of input argument wrong ({}). Program terminates.".format(len(argv)))
+        exit(0)
+
     print(relpath("log_data/event_log_choice_1_1000.csv"), "\n\n")
     get_incr_model("event_log_choice_1_1000.csv", "log_data/", 3)
     print("Funzione terminata\n")

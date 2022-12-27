@@ -1,9 +1,11 @@
 from time import time
 from csv import writer
-from os.path import join
+from os.path import join, dirname, abspath
 from my_utils import main_utils, check_path
+from sys import argv, path
+path.append("../")
 from dfg_offline import get_incr_model, from_log_to_dfg
-from sys import argv
+
 
 # taking times (within and outside) for either the whole file log
 # or the n_files in which it is splitted    

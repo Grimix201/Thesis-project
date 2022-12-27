@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
-from time import time
 from os.path import join
+from sys import path
+path.append("../")
 from my_utils import main_utils, check_path
-from dfg_offline import from_log_to_dfg
 import dfg_offline as m
+from dfg_offline import from_log_to_dfg
 
 
 if __name__ == "__main__":
