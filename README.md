@@ -35,10 +35,10 @@ To run the experiments, done using the offline version, move to the experiments 
 -$ python experiments.py <t1> <t2> <t3> <T1> <T2> <T3> <tt1> <tt2> <tt3> <repetitions> <comma-separated list of activities> [filename, [path]]
 ```
 
-for run the first experiment. The ts, Ts and tts are triplets corresponding to minimum (1), maximum(2), and additive step(3) to respectively
-  - number of cases/traces in a data log,
-  - number of activities/events composing each case,
-  - number of files in which splitting the generated data log.
+for run the first experiment. The ts, Ts and tts are triplets corresponding to minimum (1), maximum (2), and step (3) to respectively get
+  - the number of cases/traces in a data log,
+  - the number of activities/events composing each case,
+  - the number of files in which splitting the generated data log.
 
 To run the second experiment, in the experiments directory type in the terminal the following command:
 
